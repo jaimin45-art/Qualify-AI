@@ -9,26 +9,73 @@ Built with **Retell AI** (voice agent), **Twilio** (telephony), **Express** (bac
 ## Architecture
 
 ```
-Browser (Dashboard)
-       │
-       ▼
-React + Vite  ──── /api proxy ───▶  Express Backend (port 3001)
-                                          │
-                       ┌──────────────────┼──────────────────┐
-                       ▼                  ▼                  ▼
-                  Retell AI API      Supabase DB       Twilio (via Retell)
-                  (trigger call)    (store data)       (SIP/PSTN)
-                       │
-                       │ mid-call tool call
-                       ▼
-               POST /tools/get_property_estimate
-                       │
-                       │ post-call webhook
-                       ▼
-               POST /webhooks/retell
+                   +----------------------+
+                   |  Retell Dashboard    |
+                   | (Web Call Testing)   |
+                   +----------+-----------+
+                              |
+                              |
+                              v
+                    +----------------------+
+                    |     Retell AI        |
+                    +----------+-----------+
+                               |
+             call_started / call_ended /
+                 call_analyzed webhook
+                               |
+                               v
+                    +----------------------+
+                    | Express Backend      |
+                    |  Node.js + Express   |
+                    +----------+-----------+
+                               |
+                +--------------+--------------+
+                |                             |
+                v                             v
+      +-------------------+        +-------------------+
+      | Supabase Database |        | React Dashboard   |
+      | Calls             |<------>| Displays Calls,   |
+      | Transcripts       |        | Analytics & Logs  |
+      | Analysis          |        +-------------------+
+      +-------------------+
 ```
 
 ---
+
+## Flow
+--
+1. Test call is initiated directly from the Retell Dashboard.
+
+                │
+                ▼
+
+2. Retell AI starts the conversation.
+
+                │
+                ▼
+
+3. During the call, Retell sends webhook events
+   (call_started, call_ended, call_analyzed)
+   to the Express backend.
+
+                │
+                ▼
+
+4. Express processes the webhook payload.
+
+                │
+                ▼
+
+5. Call details, transcripts, and AI analysis
+   are stored in Supabase.
+
+                │
+                ▼
+
+6. React Dashboard fetches data from the backend
+   and displays real-time call information,
+   transcripts, analytics, and summaries.
+--
 
 ## Prerequisites
 

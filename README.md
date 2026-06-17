@@ -1,4 +1,4 @@
-# Dialoft AI — Real Estate Lead Qualification
+# Qualify AI  — Real Estate Lead Qualification
 
 AI voice agent that calls homeowners, qualifies them as sellers, and logs everything to a dashboard.
 
@@ -304,7 +304,7 @@ See `supabase/schema.sql` for the full definition.
 ## Project structure
 
 ```
-dialoft-ai/
+Qualify-ai/
 ├── backend/
 │   ├── server.js              # Express app entry
 │   ├── routes/
